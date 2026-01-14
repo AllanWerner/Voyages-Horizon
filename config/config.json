@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "root",
+    "password": "mypass",
+    "database": "DBHorizon",
+    "host": "localhost",
+    "dialect": "mariadb"
+  }
+}
