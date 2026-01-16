@@ -12,10 +12,16 @@ module.exports = (sequelize, DataTypes) => {
 
       // Relation Many-to-Many avec Voyage via VoyageActivite
       Activite.belongsToMany(models.Voyage, {
-        through: models.VoyageActivite,
+        through: models.VoyageActivites,
         foreignKey: 'activiteId',
         otherKey: 'voyageId',
         as: 'voyages'
+      });
+
+      // Accès direct à VoyageActivite
+      Activite.hasMany(models.VoyageActivite, {
+        foreignKey: 'activiteId',
+        as: 'voyageActivites'
       });
     }
   }

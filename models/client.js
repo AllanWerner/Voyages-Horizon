@@ -4,12 +4,18 @@ const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Client extends Model {
     static associate(models) {
-      // Relation Many-to-Many avec Voyage via Reservation
+      // Relation Many-to-Many avec Voyage via Reservation 
       Client.belongsToMany(models.Voyage, {
         through: models.Reservation,
         foreignKey: 'clientId',
         otherKey: 'voyageId',
         as: 'voyages'
+      });
+      
+      //Accès direct à  Réservation
+      Client.hasMany(models.Reservation, {
+        foreignKey: 'clientId',
+        as: 'reservations'
       });
     }
   }
