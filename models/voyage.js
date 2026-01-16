@@ -17,6 +17,13 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'clientId',
         as: 'clients'
       });
+
+      //Accès direct à Réservation
+      Voyage.hasMany(models.Reservation, {
+        foreignKey: 'voyageId',
+        as: 'reservations'
+      });
+        
       
       // Relation Many-to-Many avec Activite via VoyageActivite
       Voyage.belongsToMany(models.Activite, {
@@ -24,6 +31,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'voyageId',
         otherKey: 'activiteId',
         as: 'activites'
+      });
+
+      // Accès direct à VoyageActivite
+      Voyage.hasMany(models.VoyageActivite, {
+        foreignKey: 'voyageId',
+        as: 'voyageActivites'
       });
     }
   }
