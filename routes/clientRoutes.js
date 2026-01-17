@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {} = require("../models");
+const {Client, Voyage, Reservation, Destination} = require("../models");
 const AppError = require('../middlewares/AppError');
 const asyncHandler = require('../middlewares/asyncHandler');
 
@@ -43,9 +43,29 @@ router.get('/', asyncHandler(async (req, res, next) => {
 
 // GET /api/clients/:id - Récupérer un client spécifique
 router.get('/:id', asyncHandler(async (req, res, next) => {
-  const client = await db.Client.findByPk(req.params.id, {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    throw new AppError('ID du client invalide', 400);
+  }
+
+  const client = await Client.findByPk(id, {
     include: [
-      {through: 'Reservations', as: 'reservations'}
+      {
+        model: Reservation, 
+        as: 'reservations',
+        attributes: ['dateReservation', 'nombrePersonnes','prixTotal'],
+        include: [
+          // Pour inclure les détails du voyage pour chaque réservation
+          {
+            model: Voyage,
+            as: 'voyage',
+            attributes: ['titre','dateDepart','dureeJours','typeVoyage'],
+            // Pour récupérer la destination pour chaque voyage
+            include: [{ model: Destination, as: 'destination' , attributes: ['nom','pays','langues','description'],}]
+          }
+        ],
+        order: [['dateReservation', 'DESC']] // Pour afficher de la plus récente à la plus ancienne
+      }
     ]
   });
 
@@ -61,7 +81,8 @@ router.get('/:id', asyncHandler(async (req, res, next) => {
 
 // PUT /api/clients/:id - Mettre à jour un client
 router.put('/:id', asyncHandler(async (req, res, next) => {
-  const client = await Client.findByPk(req.params.id);
+  const id = parseInt(req.params.id);
+  const client = await Client.findByPk(id);
   
   if (!client) {
     throw new AppError('Client non trouvé', 404);
@@ -77,7 +98,8 @@ router.put('/:id', asyncHandler(async (req, res, next) => {
 
 // DELETE /api/clients/:id - Supprimer un client
 router.delete('/:id', asyncHandler(async (req, res, next) => {
-  const client = await Client.findByPk(req.params.id);
+  const id = parseInt(req.params.id);
+  const client = await Client.findByPk(id);
   
   if (!client) {
     throw new AppError('Client non trouvé', 404);
