@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Relation Many-to-Many avec Voyage via VoyageActivite
       Activite.belongsToMany(models.Voyage, {
-        through: models.VoyageActivites,
+        through : models.VoyageActivite,
         foreignKey: 'activiteId',
         otherKey: 'voyageId',
         as: 'voyages'
