@@ -379,3 +379,4 @@ Allan Werner - https://github.com/AllanWerner
 - Documentation Sequelize : https://sequelize.org/docs/v6/
 - Guide Express.js : https://expressjs.com/
 - Documentation MariaDB : https://mariadb.com/kb/en/
+
